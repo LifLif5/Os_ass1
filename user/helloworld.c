@@ -6,7 +6,6 @@
 int
 main(int argc, char *argv[])
 {
-    char *msg = "hello world xv6\n";
-    write(1,msg,strlen(msg));
-    exit(0);
+    printf("hello world xv6\n");
+    exit(0, "");
 }

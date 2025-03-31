@@ -6,12 +6,24 @@
 #include "spinlock.h"
 #include "proc.h"
 
+
+///////////////////////////////////////////////
+uint64
+sys_memsize(void)
+{
+  return myproc()->sz;
+}
+
+///////////////////////////////////////////////
+
 uint64
 sys_exit(void)
 {
   int n;
   argint(0, &n);
-  exit(n);
+  char msg[32];
+  argstr(1, msg,32);
+  exit(n,msg);
   return 0;  // not reached
 }
 
@@ -28,11 +40,33 @@ sys_fork(void)
 }
 
 uint64
+sys_forkn(void)
+{
+  int n;
+  argint(0, &n);
+  uint64 pids;
+  argaddr(1, &pids);
+  return forkn(n, ( int *) pids);
+}
+
+uint64
+sys_waitall(void)
+{
+  uint64 n;
+  argaddr(1, &n);
+  uint64 statuses;
+  argaddr(1, &statuses);
+  return waitall(n, statuses);
+}
+
+uint64
 sys_wait(void)
 {
   uint64 p;
   argaddr(0, &p);
-  return wait(p);
+  uint64 p2;
+  argaddr(1, &p2);
+  return wait(p,(char *)p2);
 }
 
 uint64
